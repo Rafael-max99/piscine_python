@@ -1,15 +1,21 @@
 #!/usr/bin/python3
 
+
 class Plant:
-    def __init__(self, name: str, height: float, age: int):
+    def __init__(self, name: str, height: float, age: int) -> None:
         self.name = name
         self.height = height
         self.age = age
 
-    def show(self):
-        print(f"Created: {self.name.capitalize()}: {self.height}cm, {self.age} days old")
+    def show(self) -> None:
+        print(
+            f"{self.name.capitalize()}: "
+            f"{self.height}cm, {self.age} days old"
+        )
+
 
 if __name__ == "__main__":
+
     plants = [
             Plant("rose", 25.0, 30),
             Plant("oak", 200.0, 365),
@@ -20,4 +26,5 @@ if __name__ == "__main__":
 
     print("=== Plant Factory Output ===")
     for plant in plants:
+        print("Created: ", end="")
         plant.show()

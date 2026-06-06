@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 class Plant:
     @staticmethod
     def is_older_than_year(age) -> bool:
@@ -10,13 +11,16 @@ class Plant:
         return cls("Unknown plant", 0.0, 0)
 
     class Stats:
-        def __init__(self):
+        def __init__(self) -> None:
             self.grow_count = 0
             self.age_count = 0
             self.show_count = 0
 
-        def display(self):
-            print(f"Stats: {self.grow_count} grow, {self.age_count} age, {self.show_count} show")
+        def display(self) -> None:
+            print(
+                f"Stats: {self.grow_count} grow, {self.age_count} age, "
+                f"{self.show_count} show"
+                )
 
     def __init__(self, name: str, height: float, age: int) -> None:
         self.name = name
@@ -33,19 +37,22 @@ class Plant:
         self._stats.age_count += 1
 
     def show(self) -> None:
-        print(f"{self.name.capitalize()}: {self._height}cm, {self._age} days old")
+        print(
+            f"{self.name.capitalize()}: {self._height}cm, {self._age} days old"
+        )
         self._stats.show_count += 1
 
     def get_stats(self) -> "Stats":
         return self._stats
 
+
 class Flower(Plant):
-    def __init__(self, name: str, height: float, age: int, color: str):
+    def __init__(self, name: str, height: float, age: int, color: str) -> None:
         super().__init__(name, height, age)
         self.color = color
         self.has_bloomed = False
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f"Color: {self.color}")
         if self.has_bloomed:
@@ -53,48 +60,56 @@ class Flower(Plant):
         else:
             print(f"{self.name.capitalize()} has not bloomed yet")
 
-    def bloom(self):
+    def bloom(self) -> None:
         self.has_bloomed = True
 
+
 class Seed(Flower):
-    def __init__(self, name: str, height: float, age: int, color: str):
+    def __init__(self, name: str, height: float, age: int, color: str) -> None:
         super().__init__(name, height, age, color)
         self.number_of_seeds = 0
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f"Seeds: {self.number_of_seeds}")
 
-    def bloom(self):
+    def bloom(self) -> None:
         super().bloom()
         self.number_of_seeds = 42
 
+
 class Tree(Plant):
     class Stats(Plant.Stats):
-        def __init__(self):
+        def __init__(self) -> None:
             super().__init__()
             self.shade_count = 0
 
-        def display(self):
+        def display(self) -> None:
             super().display()
             print(f"{self.shade_count} shade")
 
-    def __init__(self, name: str, height: float, age: int, trunk_diameter: float):
+    def __init__(
+            self, name: str, height: float, age: int, trunk_diameter: float
+            ) -> None:
         super().__init__(name, height, age)
         self.trunk_diameter = trunk_diameter
-        self._stats = Tree.Stats()
+        self._stats: "Tree.Stats" = Tree.Stats()
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f"Trunk diameter: {self.trunk_diameter}cm")
-        
 
-    def produce_shade(self):
-        print(f"Tree {self.name.capitalize()} now produces a shade of {self._height}cm long and {self.trunk_diameter}cm wide.")
+    def produce_shade(self) -> None:
+        print(
+            f"Tree {self.name.capitalize()} now produces a shade of "
+            f"{self._height}cm long and {self.trunk_diameter}cm wide."
+            )
         self._stats.shade_count += 1
 
-def display_stats(plant: Plant):
-    plant._stats.display()
+
+def display_stats(plant: Plant) -> None:
+    plant.get_stats().display()
+
 
 if __name__ == "__main__":
     rose = Flower("rose", 15.0, 10, "red")
@@ -106,7 +121,7 @@ if __name__ == "__main__":
     print("Check year-old")
     print(f"Is 30 days more than a year? -> {Plant.is_older_than_year(30)}")
     print(f"Is 400 days more than a year? -> {Plant.is_older_than_year(400)}")
-    
+
     print()
     print("=== Flower")
     rose.show()

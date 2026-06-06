@@ -1,25 +1,30 @@
 #!/usr/bin/python3
 
+
 class Plant:
-    def __init__(self, name , height, age):
+    def __init__(self, name: str, height: float, age: int) -> None:
         self.name = name
         self.height = height
-        self.age = age
+        self._age = age
         self.initial_height = height
 
-    def grow(self):
+    def grow(self) -> None:
         self.height = round(self.height + 0.8, 1)
 
-    def age_up(self):
-        self.age += 1
+    def age(self) -> None:
+        self._age += 1
 
-    def total_growth(self):
-        return round(self.height - self.initial_height)
+    def total_growth(self) -> float:
+        return round(self.height - self.initial_height, 1)
 
-    def show(self):
-        print(f"{self.name.capitalize()}: {self.height}cm, {self.age} days old")
+    def show(self) -> None:
+        print(
+            f"{self.name.capitalize()}: {self.height}cm, {self._age} days old"
+        )
+
 
 if __name__ == "__main__":
+
     print("=== Garden Plant Growth ===")
 
     rose = Plant("rose", 25.0, 30)
@@ -28,6 +33,6 @@ if __name__ == "__main__":
         print(f"=== Day {i} ===")
         rose.show()
         rose.grow()
-        rose.age_up()
+        rose.age()
 
-    print(f"Grow this week: {rose.total_growth()}cm")
+    print(f"Growth this week: {rose.total_growth()}cm")
