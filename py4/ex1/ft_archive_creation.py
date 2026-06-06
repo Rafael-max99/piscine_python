@@ -2,6 +2,7 @@
 
 import sys
 
+
 def read_file(filename: str) -> str | None:
     file = None
 
@@ -9,17 +10,18 @@ def read_file(filename: str) -> str | None:
         file = open(filename, "r")
         return file.read()
     except FileNotFoundError as e:
-        print(f"Error opening file '{filename}': '{e}'")
+        print(f"Error opening file '{filename}': {e}")
         return None
     except PermissionError as e:
-        print(f"Error opening file '{filename}': '{e}'")
+        print(f"Error opening file '{filename}': {e}")
         return None
     except Exception as e:
-        print(f"Error opening file '{filename}': '{e}'")
+        print(f"Error opening file '{filename}': {e}")
         return None
     finally:
         if file is not None:
             file.close()
+
 
 def write_file(filename: str, content: str) -> bool:
     file = None
@@ -29,10 +31,10 @@ def write_file(filename: str, content: str) -> bool:
         file.write(content)
         return True
     except PermissionError as e:
-        print(f"Error opening file '{filename}': '{e}'")
+        print(f"Error opening file '{filename}': {e}")
         return False
     except Exception as e:
-        print(f"Error opening file '{filename}': '{e}'")
+        print(f"Error opening file '{filename}': {e}")
         return False
     finally:
         if file is not None:
@@ -47,15 +49,14 @@ def main() -> None:
     print("=== Cyber Archives Recovery & Preservation ===")
 
     filename = sys.argv[1]
-    print(f"Accessing file '{filename}'")
+    print(f"Accessing file '{filename}'--")
 
     content = read_file(filename)
     if content is None:
         return
 
-    print("--\n")
-    print(content, end="")
-    print("\n--")
+    print("--")
+    print(content, end="--\n")
     print(f"File '{filename}' closed.")
 
     print("\nTransform data:")
@@ -69,9 +70,8 @@ def main() -> None:
             transformed_lines.append(line)
     transformed_content = "\n".join(transformed_lines)
 
-    print("--\n")
-    print(transformed_content)
     print("--")
+    print(transformed_content, end="--\n")
 
     print("\nEnter new file name (or empty):", end=" ")
     new_filename = input()
@@ -85,6 +85,7 @@ def main() -> None:
         print(f"Data saved in file '{new_filename}'.")
     else:
         print("Data not saved.")
+
 
 if __name__ == "__main__":
     main()
