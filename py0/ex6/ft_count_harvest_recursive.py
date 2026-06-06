@@ -12,5 +12,3 @@ def ft_count_harvest_recursive():
             helper(count + 1)
 
     helper(1)
-
-ft_count_harvest_recursive()
