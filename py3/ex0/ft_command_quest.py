@@ -11,5 +11,5 @@ if __name__ == "__main__":
         print(f"Arguments received: {len(sys.argv) - 1}")
         for num in range(1, len(sys.argv)):
             print(f"Argument {num}: {sys.argv[num]}")
-        
+
     print(f"Total arguments: {len(sys.argv)}")

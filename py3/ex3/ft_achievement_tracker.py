@@ -3,20 +3,21 @@
 import random
 
 ACHIEVEMENTS = [
-        "Crafting Genius", "World Savior", "Master Explorer", "Collector Supreme", "Untouchable",
-        "Boss Slayer", "Strategist", "Unstoppable", "Speed Runner", "Survivor", "Treasure Hunter",
+        "Crafting Genius", "World Savior", "Master Explorer",
+        "Collector Supreme", "Untouchable",
+        "Boss Slayer", "Strategist", "Unstoppable",
+        "Speed Runner", "Survivor", "Treasure Hunter",
         "First Steps", "Sharp Mind"
         ]
-
-
 
 
 def gen_player_achievements() -> set[str]:
     achiv_generator = random.randint(5, 9)
     return set(random.sample(ACHIEVEMENTS, achiv_generator))
 
+
 if __name__ == "__main__":
-    print("=== Achievements Tracker System ===")
+    print("=== Achievement Tracker System ===")
 
     players = {
             "Alice": gen_player_achievements(),
@@ -28,16 +29,16 @@ if __name__ == "__main__":
     for player, achievements in players.items():
         print(f"Player {player}: {achievements}")
 
-    all_achievements = set()
+    all_achievements: set[str] = set()
     for achievement in players.values():
         all_achievements = all_achievements.union(achievement)
     print(f"\nAll distinct achievements: {all_achievements}")
 
     values = list(players.values())
-    common_achievements = set(values[0])
+    common_achieves: set[str] = set(values[0])
     for achievement in values[1:]:
-        common_achievements = common_achievements.intersection(set(achievement))
-    print(f"\nCommon achievements: {common_achievements}\n")
+        common_achieves = common_achieves.intersection(set(achievement))
+    print(f"\nCommon achievements: {common_achieves}\n")
 
     for player, achievements in players.items():
         unique = achievements.copy()

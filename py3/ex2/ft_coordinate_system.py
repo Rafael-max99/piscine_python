@@ -2,9 +2,10 @@
 
 import math
 
+
 def get_player_pos() -> tuple[float, float, float]:
     while True:
-        values = input(f"Enter new coordinates as floats in format 'x,y,z': ")
+        values = input("Enter new coordinates as floats in format 'x,y,z': ")
         parts = values.split(",")
 
         if len(parts) != 3:
@@ -18,20 +19,29 @@ def get_player_pos() -> tuple[float, float, float]:
             try:
                 coords.append(float(part))
             except ValueError:
-                print(f"Error on parameter '{part}: could not convert string to float: '{part}''")
+                print(
+                    f"Error on parameter '{part}': "
+                    f"could not convert string to float: '{part}'"
+                    )
                 break
         else:
-            return tuple(coords)
+            return (coords[0], coords[1], coords[2])
+
 
 def distance_to_center(pos: tuple[float, float, float]) -> float:
     x, y, z = pos
     return math.sqrt(x**2 + y**2 + z**2)
 
-def distance_between(pos1: tuple[float, float, float], pos2: tuple[float, float, float]) -> float:
+
+def distance_between(
+        pos1: tuple[float, float, float],
+        pos2: tuple[float, float, float]
+        ) -> float:
     x1, y1, z1 = pos1
     x2, y2, z2 = pos2
 
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+
 
 if __name__ == "__main__":
     print("=== Game Coordinate System ===")

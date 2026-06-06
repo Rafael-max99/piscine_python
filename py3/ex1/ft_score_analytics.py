@@ -2,7 +2,8 @@
 
 import sys
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     print("=== Player Score Analytics ===")
     scores = []
 
@@ -13,7 +14,10 @@ if __name__== "__main__":
             print(f"Invalid parameter: '{arg}'")
 
     if not scores:
-        print("No scores provided. Usage: python3 ft_score_analytics.py <score1> <score2> ...")
+        print(
+            "No scores provided. "
+            "Usage: python3 ft_score_analytics.py <score1> <score2> ..."
+            )
         sys.exit()
 
     total_players = len(scores)
