@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 
 import typing
-import re
 from typing import Any, Protocol
 from abc import ABC, abstractmethod
 
+
 class DataProcessor(ABC):
     
-    def __init__(self):
-        self.data = []
+    def __init__(self) -> None:
+        self.data: list[str] = []
         self.count = 0
+        self.name: str = ""
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
@@ -25,7 +26,12 @@ class DataProcessor(ABC):
             return (self.count, data)
         return (self.count, "")
 
+
 class NumericProcessor(DataProcessor):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Numeric Processor"
 
     def validate(self, data: Any) -> bool:
         if isinstance(data, (int, float)):
@@ -41,7 +47,7 @@ class NumericProcessor(DataProcessor):
 
     def ingest(self, data: Any) -> None:
         if not self.validate(data):
-            raise ValueError ("Inproper numeric data")
+            raise ValueError("Improper numeric data")
 
         if isinstance(data, (int, float)):
             self.data.append(str(data))
@@ -51,7 +57,12 @@ class NumericProcessor(DataProcessor):
                 self.data.append(str(val))
             self.count += len(data)
 
+
 class TextProcessor(DataProcessor):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Text Processor"
 
     def validate(self, data: Any) -> bool:
         if isinstance(data, str):
@@ -67,7 +78,7 @@ class TextProcessor(DataProcessor):
 
     def ingest(self, data: Any) -> None:
         if not self.validate(data):
-            raise ValueError ("Inproper text data")
+            raise ValueError("Improper text data")
 
         if isinstance(data, str):
             self.data.append(data)
@@ -77,7 +88,12 @@ class TextProcessor(DataProcessor):
                 self.data.append(val)
             self.count += len(data)
 
+
 class LogProcessor(DataProcessor):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Log Processor"
 
     def validate(self, data: Any) -> bool:
         if isinstance(data, dict):
@@ -99,22 +115,28 @@ class LogProcessor(DataProcessor):
 
     def ingest(self, data: Any) -> None:
         if not self.validate(data):
-            raise ValueError ("Invalid log data")
+            raise ValueError("Invalid log data")
 
         if isinstance(data, dict):
-            log_str = f"{data.get('log_level', 'UNKNOWN')}: {data.get('log_message', '')}"
+            level = data.get('log_level', 'UNKNOWN')
+            msg = data.get('log_message', '')
+            log_str = f"{level}: {msg}"
             self.data.append(log_str)
             self.count += 1
         else: # list
             for item in data:
-                log_str = f"{item.get('log_level', 'UNKNOWN')}: {item.get('log_message', '')}"
+                level = item.get('log_level', 'UNKNOWN')
+                msg = item.get('log_message', '')
+                log_str = f"{level}: {msg}"
                 self.data.append(log_str)
             self.count += len(data)
+
 
 class ExportPlugin(Protocol):
 
     def process_output(self, data: list[tuple[int, str]]) -> None:
         ...
+
 
 class CSVPlugin:
 
@@ -125,21 +147,21 @@ class CSVPlugin:
             values.append(value)
 
         csv_row = ",".join(values)
-        print(f"CSV Output: {csv_row}")
+        print("CSV Output:")
+        print(csv_row)
+
 
 class JSONPlugin:
 
     def process_output(self, data: list[tuple[int, str]]) -> None:
-        json_dict = {}
+        pairs = ", ".join(f'"item_{count}": "{value}"' for count, value in data)
+        print("JSON Output:")
+        print("{" + pairs + "}")
 
-        for count, value in data:
-            json_dict[f"item_{count}"] = value
-
-        print(f"JSON Output: {json_dict}")
 
 class DataStream:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.processors: list[DataProcessor] = []
 
     def register_processor(self, proc: DataProcessor) -> None:
@@ -174,11 +196,12 @@ class DataStream:
             return
 
         for processor in self.processors:
-            proc_name = processor.__class__.__name__
+            proc_name = processor.name
             total = processor.count
             remaining = len(processor.data)
-            display_name = re.sub(r'(?<!^)(?=[A-Z])', ' ', proc_name)
-            print(f"{display_name}: total {total} items processed, remaining {remaining} on processor")
+            print(f"{proc_name}: total {total} items processed, "
+                  f"remaining {remaining} on processor"
+                  )
 
 
 def main() -> None:
@@ -194,9 +217,12 @@ def main() -> None:
     stream.register_processor(LogProcessor())
 
     batch1 = ['Hello world', [3.14, -1, 2.71],
-              [{'log_level': 'WARNING', 'log_message': 'Telnet access! Use ssh instead'},
-               {'log_level': 'INFO', 'log_message': 'User wil is connected'}],
-              42, ['Hi', 'five']]
+              [{'log_level': 'WARNING',
+                'log_message': 'Telnet access! Use ssh instead'},
+               {'log_level': 'INFO',
+                'log_message': 'User wil is connected'}],
+              42, ['Hi', 'five']
+              ]
 
     print(f"\nSend first batch of data on stream: {batch1}")
     stream.process_stream(batch1)
@@ -207,9 +233,12 @@ def main() -> None:
     stream.print_processors_stats()
 
     batch2 = [21, ['I love AI', 'LLMs are wonderful', 'Stay healthy'],
-			  [{'log_level': 'ERROR', 'log_message': '500 server crash'},
-			   {'log_level': 'NOTICE', 'log_message': 'Certificate expires in 10 days'}],
-			  [32, 42, 64, 84, 128, 168], 'World hello']
+			  [{'log_level': 'ERROR',
+                'log_message': '500 server crash'},
+			   {'log_level': 'NOTICE',
+                'log_message': 'Certificate expires in 10 days'}],
+			  [32, 42, 64, 84, 128, 168], 'World hello'
+              ]
 
     print(f"\nSend another batch of data: {batch2}")
     stream.process_stream(batch2)
@@ -223,6 +252,7 @@ def main() -> None:
     print("\nSend the same batch again")
     stream.process_stream(batch1)
     stream.print_processors_stats()
+
 
 if __name__ == "__main__":
     main()

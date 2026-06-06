@@ -3,10 +3,10 @@
 from typing import Any
 from abc import ABC, abstractmethod
 
+
 class DataProcessor(ABC):
-    
-    def __init__(self):
-        self.data = []
+    def __init__(self) -> None:
+        self.data: list[str] = []
         self.count = 0
 
     @abstractmethod
@@ -22,6 +22,7 @@ class DataProcessor(ABC):
             data = self.data.pop(0)
             return (self.count, data)
         return (self.count, "")
+
 
 class NumericProcessor(DataProcessor):
 
@@ -39,7 +40,7 @@ class NumericProcessor(DataProcessor):
 
     def ingest(self, data: Any) -> None:
         if not self.validate(data):
-            raise ValueError ("Inproper numeric data")
+            raise ValueError("Improper numeric data")
 
         if isinstance(data, (int, float)):
             self.data.append(str(data))
@@ -48,6 +49,7 @@ class NumericProcessor(DataProcessor):
                 self.data.append(str(val))
 
         self.count += 1
+
 
 class TextProcessor(DataProcessor):
 
@@ -65,7 +67,7 @@ class TextProcessor(DataProcessor):
 
     def ingest(self, data: Any) -> None:
         if not self.validate(data):
-            raise ValueError ("Inproper text data")
+            raise ValueError("Improper text data")
 
         if isinstance(data, str):
             self.data.append(data)
@@ -74,6 +76,7 @@ class TextProcessor(DataProcessor):
                 self.data.append(val)
 
         self.count += 1
+
 
 class LogProcessor(DataProcessor):
 
@@ -97,27 +100,32 @@ class LogProcessor(DataProcessor):
 
     def ingest(self, data: Any) -> None:
         if not self.validate(data):
-            raise ValueError ("Invalid log data")
+            raise ValueError("Invalid log data")
 
         if isinstance(data, dict):
-            log_str = f"{data.get('log_level', 'UNKNOWN')}: {data.get('log_message', '')}"
+            level = data.get('log_level', 'UNKNOWN')
+            msg = data.get('log_message', '')
+            log_str = f"{level}: {msg}"
             self.data.append(log_str)
         else: # list
             for item in data:
-                log_str = f"{item.get('log_level', 'UNKNOWN')}: {item.get('log_message', '')}"
+                level = item.get('log_level', 'UNKNOWN')
+                msg = item.get('log_message', '')
+                log_str = f"{level}: {msg}"
                 self.data.append(log_str)
 
         self.count += 1
 
+
 def main() -> None:
     print("=== Code Nexus - Data Processor ===")
-    
+
     print("\nTesting Numeric Processor...")
     numeric = NumericProcessor()
     print(f"Trying to validate input: '42': {numeric.validate(42)}")
     print(f"Trying to validate input: 'Hello': {numeric.validate('Hello')}")
 
-    print(f"Test invalid ingestion of string 'foo' without prior validation:")
+    print("Test invalid ingestion of string 'foo' without prior validation:")
     try:
         numeric.ingest("foo")
     except ValueError as e:
@@ -128,7 +136,7 @@ def main() -> None:
     print("Extracting 3 values...")
     for i in range(3):
         count, value = numeric.output()
-        print(f"Numeric valeu {i}: {value}")
+        print(f"Numeric value {i}: {value}")
 
     # test TextProcessor
     print("\nTesting Text Processor...")
@@ -138,7 +146,7 @@ def main() -> None:
     print("Processing data: ['Hello', 'Nexus', 'World']")
     print("Extracting 1 value...")
     count, value = text.output()
-    print(f"Text valeu 0: {value}")
+    print(f"Text value 0: {value}")
 
     # test LogProcessor
     print("\n\nTesting Log Processor...")
@@ -155,6 +163,7 @@ def main() -> None:
     for i in range(2):
         count, value = log.output()
         print(f"Log entry {i}: {value}")
+
 
 if __name__ == "__main__":
     main()
