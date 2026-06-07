@@ -2,11 +2,14 @@
 
 from typing import Callable, Any
 
+
 def fireball(target: str, power: int) -> str:
     return f"Fireball hits {target} for {power} damage"
 
+
 def heal(target: str, power: int) -> str:
     return f"Heals {target} for {power} damage"
+
 
 def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
     def combined(target: str, power: int) -> tuple:
@@ -15,10 +18,12 @@ def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
         return (result1, result2)
     return combined
 
+
 def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
     def amplified(target: str, power: int) -> str:
         return base_spell(target, power * multiplier)
     return amplified
+
 
 def conditional_caster(condition: Callable, spell: Callable) -> Callable:
     def conditional(target: str, power: int) -> str:
@@ -27,6 +32,7 @@ def conditional_caster(condition: Callable, spell: Callable) -> Callable:
         return "Spell fizzled"
     return conditional
 
+
 def spell_sequence(spells: list[Callable]) -> Callable:
     def sequence(target: str, power: int) -> list[str]:
         results = []
@@ -34,6 +40,7 @@ def spell_sequence(spells: list[Callable]) -> Callable:
             results.append(spell(target, power))
         return results
     return sequence
+
 
 def main() -> None:
 
@@ -58,6 +65,7 @@ def main() -> None:
     results = sequence("Dragon", 20)
     for r in results:
         print(f"{r}")
+
 
 if __name__ == "__main__":
     main()
