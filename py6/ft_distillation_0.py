@@ -1,4 +1,4 @@
-#!/usr/bin/pyrhon3
+#!/usr/bin/python3
 
 from alchemy.potions import strength_potion, healing_potion
 
