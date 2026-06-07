@@ -4,6 +4,14 @@ import sys
 import importlib
 from typing import Any
 
+try:
+    import pandas as pd
+    import matplotlib.pyplot as plt
+except ImportError:
+    pd = None  # type: ignore
+    plt = None  # type: ignore
+
+
 def check_dependency(module_name: str) -> tuple[bool, str]:
     try:
         module = importlib.import_module(module_name)
@@ -12,7 +20,8 @@ def check_dependency(module_name: str) -> tuple[bool, str]:
     except ImportError:
         return (False, 'not installed')
 
-def load_dependencies() -> dict[str, Any]:
+
+def load_dependencies() -> tuple[dict[str, Any], list[str]]:
     dependencies = {}
     required_modules = {
             'pandas': 'Data manipulation ready',
@@ -22,7 +31,7 @@ def load_dependencies() -> dict[str, Any]:
             }
 
     print("LOADING STATUS: Loading programs...")
-	print("Checking dependencies:")
+    print("Checking dependencies:")
 
     missing = []
 
@@ -41,30 +50,32 @@ def load_dependencies() -> dict[str, Any]:
 
     return dependencies, missing
 
+
 def show_installation_instructions(missing: list[str]) -> None:
     if not missing:
         return
 
     print("\nMISSING DEPENDENCIES!")
-	print("\nTo install with pip:")
-	print("pip install -r requirements.txt")
-	print("\nTo install with Poetry:")
-	print("poetry install")
-	print("poetry run python loading.py")
+    print("\nTo install with pip:")
+    print("pip install -r requirements.txt")
+    print("\nTo install with Poetry:")
+    print("poetry install")
+    print("poetry run python loading.py")
+
 
 def analyze_matrix_data(numpy_module: Any) -> None:
     try:
-        import pandas as pd
-        import matplotlib.pylot as plt
-
-        print("\Analyzing Matrix data...")
+        print("\nAnalyzing Matrix data...")
 
         num_points = 1000
         print(f"Processing {num_points} data points...")
 
         data = numpy_module.random.normal(loc=0, scale=1, size=num_points)
 
-        df = pd.DataFrame({'matrix_values': data, 'timestamp': range(num_points)})
+        df = pd.DataFrame({
+            'matrix_values': data,
+            'timestamp': range(num_points)
+            })
 
         mean = df['matrix_values'].mean()
         std = df['matrix_values'].std()
@@ -73,18 +84,19 @@ def analyze_matrix_data(numpy_module: Any) -> None:
         print(f"Std Dev: {std:.4f}")
 
         print("Generating visualization...")
-		plt.figure(figsize=(10, 6))
-		plt.hist(df['matrix_values'], bins=50, edgecolor='black')
-		plt.title('Matrix Data Distribution')
-		plt.xlabel('Values')
-		plt.ylabel('Frequency')
-		plt.savefig('matrix_analysis.png')
-		plt.close()
+        plt.figure(figsize=(10, 6))
+        plt.hist(df['matrix_values'], bins=50, edgecolor='black')
+        plt.title('Matrix Data Distribution')
+        plt.xlabel('Values')
+        plt.ylabel('Frequency')
+        plt.savefig('matrix_analysis.png')
+        plt.close()
 
         print("\nAnalysis complete!")
-		print("Results saved to: matrix_analysis.png")
+        print("Results saved to: matrix_analysis.png")
     except Exception as e:
         print(f"Error during analysis: {e}")
+
 
 def main() -> None:
     print()
@@ -99,8 +111,6 @@ def main() -> None:
     else:
         print("\nCannot proceed without pandas and numpy")
 
+
 if __name__ == "__main__":
     main()
-
-
-
