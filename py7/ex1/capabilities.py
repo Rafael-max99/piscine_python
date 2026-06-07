@@ -2,15 +2,17 @@
 
 from abc import ABC, abstractmethod
 
+
 class HealCapability(ABC):
 
     @abstractmethod
     def heal(self, target=None) -> str:
         pass
 
+
 class TransformCapability(ABC):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.transformed = False
 
     @abstractmethod

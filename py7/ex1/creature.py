@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from ex1.capabilities import HealCapability, TransformCapability
 
+
 class Creature(ABC):
 
     def __init__(self, name: str, creature_type: str) -> None:
@@ -16,26 +17,29 @@ class Creature(ABC):
     def describe(self) -> str:
         return f"{self.name} is a {self.creature_type} type Creature"
 
+
 class Sproutling(Creature, HealCapability):
 
     def __init__(self) -> None:
         super().__init__("Sproutling", "Grass")
 
     def attack(self) -> str:
-        return "Sprouling uses Vine Whip!"
+        return "Sproutling uses Vine Whip!"
 
     def heal(self, target=None) -> str:
-        return "Sprouling heals itself for a small amount"
+        return "Sproutling heals itself for a small amount"
+
 
 class Bloomelle(Creature, HealCapability):
     def __init__(self) -> None:
         super().__init__("Bloomelle", "Grass/Fairy")
 
     def attack(self) -> str:
-        return "Bloomelle uses Pedal Dance!"
+        return "Bloomelle uses Petal Dance!"
 
     def heal(self, target=None) -> str:
-        return "Bloomelle heals itself and others for large amount"
+        return "Bloomelle heals itself and others for a large amount"
+
 
 class Shiftling(Creature, TransformCapability):
 
@@ -46,15 +50,16 @@ class Shiftling(Creature, TransformCapability):
     def attack(self) -> str:
         if self.transformed:
             return "Shiftling performs a boosted strike!"
-        return "Shiftling attacks normally"
+        return "Shiftling attacks normally."
 
     def transform(self) -> str:
         self.transformed = True
-        return "Shiftling shifts into a shaper form!"
+        return "Shiftling shifts into a sharper form!"
 
     def revert(self) -> str:
         self.transformed = False
         return "Shiftling returns to normal."
+
 
 class Morphagon(Creature, TransformCapability):
 
@@ -65,7 +70,7 @@ class Morphagon(Creature, TransformCapability):
     def attack(self) -> str:
         if self.transformed:
             return "Morphagon unleashes a devastating morph strike!"
-        return "Morphagon attacks normally"
+        return "Morphagon attacks normally."
 
     def transform(self) -> str:
         self.transformed = True
